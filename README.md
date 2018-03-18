@@ -1,6 +1,6 @@
 ## Data-Driven Microservices for Intrusion Detection
 
-The main idea of the project is to develop an intrusion detection system as micro services. The deployment of microservices has to be dynamic. I made use of NFV to create multiple VMs which can be dynamically created and destroyed on a fly using an SDN controller.
+1. The main idea of the project is to develop an intrusion detection system as micro services. The deployment of microservices has to be dynamic. I made use of NFV to create multiple VMs which can be dynamically created and destroyed on a fly using an SDN controller.
 2. The infrastructure consists of a Traffic classifier, SDN controller & Micro services architecture.
 3. Traffic classifier classifies traffic based on historical data to malicious or suspicious.
 4. The suspicious packets are encapsulated and sent to the Micro services infrastructure. Meanwhile, the controller also receives information about the packet from traffic classifier through distributed messaging.
