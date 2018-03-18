@@ -1,0 +1,8 @@
+name = 'egress'
+kernel = '/users/girish0/ClickOsSetupForCloudLab/clickos/minios/build/clickos_x86_64'
+vcpus = '1'
+memory = '128'
+vif = ['script=vif-openvswitch,mac=00:00:00:00:20:00,bridge=xenbr0']
+on_crash = 'preserve'
+on_poweroff = 'destroy'
+click = 'egress.click'
