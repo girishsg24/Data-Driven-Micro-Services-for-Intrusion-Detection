@@ -21,6 +21,7 @@ We further implement a wide range of middleboxes including a firewall, a carrier
 ====================================================================
 
 This repository contains the useful scripts for setting up ClickOS test bed in CloudLab. 
+And several VNF applications in sub directories.
 This scripts have been tested under Ubuntu 14.04 LTS
 
 =================================================================
