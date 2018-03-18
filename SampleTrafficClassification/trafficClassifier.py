@@ -16,11 +16,7 @@ if(normalData.shape[0]>0):
 	normalData.to_sql(name="NormalData", con=db, if_exists='replace', flavor='mysql')
 if(attackData.shape[0]>0):
 	attackData.to_sql(name="AttackData", con=db, if_exists='replace', flavor='mysql')
-
-#print(attackData.shape)
-#print(normalData.shape)
-#print(dataFrame.shape)
-
+	
 if (attackData.shape[0]>0):
     #Get TCP attack data 
     tcpAttackData = attackData[attackData.TProtocol == "tcp"]
@@ -52,9 +48,4 @@ if (attackData.shape[0]>0):
     icmpAttackData = attackData[attackData.TProtocol == "icmp"]
     if(icmpAttackData.shape[0]>0):
                 icmpAttackData.to_sql(name="ICMPAttackData", con=db, if_exist='replace', flavor='mysql')
-    
-    
-
-#normalData.set_index("SrcIpAddr",inplace = True)
-#print(normalData)
-
+   
