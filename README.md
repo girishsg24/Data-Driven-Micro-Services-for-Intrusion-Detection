@@ -1,3 +1,13 @@
+## Data-Driven Microservices for Intrusion Detection
+
+1. The main idea of the project is to develop an intrusion detection system as micro services. The deployment of microservices has to be dynamic. I made use of NFV to create multiple VMs which can be dynamically created and destroyed on a fly using an SDN controller.
+2. The infrastructure consists of a Traffic classifier, SDN controller & Micro services architecture.
+3. Traffic classifier classifies traffic based on historical data to malicious or suspicious.
+4. The suspicious packets are encapsulated and sent to the Micro services infrastructure. Meanwhile, the controller also receives information about the packet from traffic classifier through distributed messaging.
+5. It uses this information to spawn a set of necessary microservices. The arriving packet is steered through the services to perform deep packet inspection & intrusion detection.
+6. The SDN controller destroys the microservices after the packet processing.
+7. I made use of RYU for a SDN controller, Xen hypervisor for virtualization, open source NFV platform called clickos & zeromq for distributed messaging to build an end to end system
+
 ## ClickOS
 Over the years middleboxes have become a fundamental part of today’s networks. Despite their usefulness, 
 they come with a number of problems, many of which arise from the fact that they are hardware-based: they are costly,
