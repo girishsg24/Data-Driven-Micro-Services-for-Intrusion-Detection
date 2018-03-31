@@ -24,27 +24,59 @@ CheckWaterMark::CheckWaterMark()
   _drops = 0;
 }
 
-Packet *
-CheckWaterMark::simple_action(Packet *p)
+u_char removeWaterMark(u_char* pktPtr, int& pktLength,u_int16_t position)
 {
-  unsigned int waterMark;
+    u_char* currPtr = pktPtr;
+    char waterMark;
+    for (int i=0;i<pktLength-1;i++)
+    {
+        if (i<position)
+        {
+          currPtr++;  
+        }
+        else
+        {
+            if(i==position)
+            {
+                waterMark = *currPtr;
+            }
+            *currPtr=*(currPtr+1);
+            currPtr++;
+        }
+    }
+    pktLength--;
+    return waterMark;
+}
 
-  int len = p->length();
+int decode(u_char* pktPtr,int& pktLen, char* waterMark)
+{
+    u_int16_t pos1 = 3;
+    u_int16_t pos2 = 5;
+    u_int16_t pos3 = 7;
+    u_int16_t pos4 = 9;
+    string pktHex = "";
+    if(removeWaterMark(pktPtr,pktLen,pos4)!=waterMark[3]) return 0;
+    if(removeWaterMark(pktPtr,pktLen,pos3)!=waterMark[2]) return 0;
+    if(removeWaterMark(pktPtr,pktLen,pos2)!=waterMark[1]) return 0;
+    if(removeWaterMark(pktPtr,pktLen,pos1)!=waterMark[0]) return 0;
+    return 1;
+}
+
+Packet* CheckWaterMark::simple_action(Packet *p)
+{
   if(len < 4)
     goto drop;
-  waterMark=0xfffcfcff;
-  unsigned int pWaterMark;
-  memcpy(&pWaterMark, p->data() + len - 4, 4);
-  if(pWaterMark != waterMark)
+  int len = p->length();
+  WritablePacket *q = p->put(0);
+  char requiredWaterMark[4] = {0x73,0x6a,0x73,0x75};
+  if (!decode(q,len,requiredWaterMark))
     goto drop;
-
-  p->take(4);
-  return p;
-
+  q->take(4);
+  return q;  
  drop:
-  click_chatter("WATERMARK failed, len %d",
-              p->length());
+  click_chatter("WATERMARK failed, len %d", p->length());
   p->kill();
+  q->kill();
   _drops++;
   return 0;
 }
