@@ -60,23 +60,10 @@ void encode(char* pktPtr, int pktLen, char* waterMark)
     u_int16_t pos3 = (7);
     u_int16_t pos4 = (9);
     
-    //cout<<"**********************************************"<<endl;
     insertWaterMark(pktPtr,pktLen,pos1,waterMark1);
-  // std::string pktHex = string_to_hex(string((const char*)pktPtr),pktLen);
-    //cout<<"Inserting watermark at pos: "<<pos1<<endl<<pktHex<<endl<<endl;
-    
     insertWaterMark(pktPtr,pktLen+1,pos2,waterMark2);
-   // pktHex = string_to_hex(string((const char*)pktPtr),pktLen);
-    //cout<<"Inserting watermark at pos: "<<pos2<<endl<<pktHex<<endl<<endl;
-    
     insertWaterMark(pktPtr,pktLen+2,pos3,waterMark3);
-   // pktHex = string_to_hex(string((const char*)pktPtr),pktLen);
-    //cout<<"Inserting watermark at pos: "<<pos3<<endl<<pktHex<<endl<<endl;
-    
     insertWaterMark(pktPtr,pktLen+3,pos4,waterMark4);
-   // pktHex = string_to_hex(string((const char*)pktPtr),pktLen);
-    //cout<<"Inserting watermark at pos: "<<pos4<<endl<<pktHex<<endl<<endl;
-    //cout<<"**********************************************"<<endl;
 }
 
 SetWaterMark::SetWaterMark()
@@ -87,18 +74,9 @@ Packet *
 SetWaterMark::simple_action(Packet *p)
 {
   int len = p->length();
- // printf("maclength %i,%x",p->mac_length(),p->mac_length());
- // int payloadOffset = (p->mac_length())+(p->ip_header_length())+(icmpPingHeaderLength);
-  //size_t payloadLen = len-payloadOffset; 
-  //unsigned int waterMark = 0xfffcfcff;
   char waterMark[5] = {0x73,0x6a,0x73,0x75};
   WritablePacket *q = p->put(4);
-  //printf("payloadoffset %i\n",payloadOffset);
- // printf("payloadoffset %x\n",payloadOffset);
- // printf("payloadLen %x,%i\n", payloadLen,payloadLen);
   encode((char*)q->data(),len, waterMark);
-  
-  //memcpy(q->data() + len, &waterMark, 4);
   return(q);
 }
 
