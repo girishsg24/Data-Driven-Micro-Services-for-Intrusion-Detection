@@ -24,7 +24,7 @@ CheckWaterMark::CheckWaterMark()
   _drops = 0;
 }
 
-u_char removeWaterMark(u_char* pktPtr, int& pktLength,u_int16_t position)
+u_char removeWaterMark(u_char* pktPtr, int& pktLength,int& position)
 {
     u_char* currPtr = pktPtr;
     char waterMark;
@@ -45,31 +45,48 @@ u_char removeWaterMark(u_char* pktPtr, int& pktLength,u_int16_t position)
         }
     }
     pktLength--;
+    printf("\nTaking WaterMark: %x at position: %d,waterMark,position");
     return waterMark;
 }
 
 int decode(u_char* pktPtr,int& pktLen, char* waterMark)
 {
-    u_int16_t pos1 = 3;
-    u_int16_t pos2 = 5;
-    u_int16_t pos3 = 7;
-    u_int16_t pos4 = 9;
-    string pktHex = "";
-    if(removeWaterMark(pktPtr,pktLen,pos4)!=waterMark[3]) return 0;
-    if(removeWaterMark(pktPtr,pktLen,pos3)!=waterMark[2]) return 0;
-    if(removeWaterMark(pktPtr,pktLen,pos2)!=waterMark[1]) return 0;
-    if(removeWaterMark(pktPtr,pktLen,pos1)!=waterMark[0]) return 0;
+    int pos1 = 3;
+    int pos2 = 5;
+    int pos3 = 7;
+    int pos4 = 9;
+    if(removeWaterMark(pktPtr,pktLen,pos4)!=waterMark[3])
+    {
+       printf("\nWaterMark mismatch at position: %d\n",pos4);
+       return 0;
+    }
+    if(removeWaterMark(pktPtr,pktLen,pos3)!=waterMark[2])
+    {
+       printf("\nWaterMark mismatch at position: %d,pos3\n");
+       return 0;
+    }
+    if(removeWaterMark(pktPtr,pktLen,pos2)!=waterMark[1])
+    {
+       printf("\nWaterMark mismatch at position: %d,pos2\n");
+       return 0;
+    }
+    if(removeWaterMark(pktPtr,pktLen,pos1)!=waterMark[0])
+    {
+       printf("\nWaterMark mismatch at position: %d, pos1\n");
+       return 0;
+    }
+    printf("\nWaterMark Matched, Removing waterMark...\n");
     return 1;
 }
 
 Packet* CheckWaterMark::simple_action(Packet *p)
 {
-  if(len < 4)
-    goto drop;
   int len = p->length();
   WritablePacket *q = p->put(0);
   char requiredWaterMark[4] = {0x73,0x6a,0x73,0x75};
-  if (!decode(q,len,requiredWaterMark))
+  if(len < 4)
+    goto drop;
+  if (!decode((u_char*)q,len,requiredWaterMark))
     goto drop;
   q->take(4);
   return q;  
