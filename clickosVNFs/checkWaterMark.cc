@@ -52,10 +52,10 @@ int removeWaterMark(char* pktPtr, int& pktLength,int& position, char& waterMark)
 
 int decode(char* pktPtr,int& pktLen, char* waterMark)
 {
-    int pos1 = 3;
-    int pos2 = 5;
-    int pos3 = 7;
-    int pos4 = 9;
+    int pos1 = 55;
+    int pos2 = 60;
+    int pos3 = 65;
+    int pos4 = 70;
     int embededMark = removeWaterMark(pktPtr,pktLen,pos4,waterMark[3]);
     if(!embededMark)
     {
@@ -94,7 +94,7 @@ Packet* CheckWaterMark::simple_action(Packet *p)
   //for(int i=0;i<4;i++,test++)
   //printf("\n%x ",*test);
   //printf("\n");
-
+  printf("\nlength:%d\n",len);
   char requiredWaterMark[4] = {0x73,0x6a,0x73,0x75};
   if(len < 4)
     goto drop;
