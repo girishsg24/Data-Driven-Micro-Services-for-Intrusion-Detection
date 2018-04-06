@@ -55,10 +55,10 @@ void encode(char* pktPtr, int pktLen, char* waterMark)
     char waterMark2 = waterMark[1];
     char waterMark3 = waterMark[2];
     char waterMark4 = waterMark[3];
-    u_int16_t pos1 = (3);
-    u_int16_t pos2 = (5);
-    u_int16_t pos3 = (7);
-    u_int16_t pos4 = (9);
+    u_int16_t pos1 = (55);
+    u_int16_t pos2 = (60);
+    u_int16_t pos3 = (65);
+    u_int16_t pos4 = (70);
     
     insertWaterMark(pktPtr,pktLen,pos1,waterMark1);
     insertWaterMark(pktPtr,pktLen+1,pos2,waterMark2);
@@ -75,8 +75,10 @@ SetWaterMark::simple_action(Packet *p)
 {
   int len = p->length();
   char waterMark[5] = {0x73,0x6a,0x73,0x75};
+ printf("\noriginalLen: %d",len);
   WritablePacket *q = p->put(4);
   encode((char*)q->data(),len, waterMark);
+ printf("\nlength: %d\n",q->length());
   return(q);
 }
 
