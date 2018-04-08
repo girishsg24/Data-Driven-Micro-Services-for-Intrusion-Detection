@@ -17,6 +17,9 @@
 
 #include <click/config.h>
 #include "checkWaterMark.hh"
+#include <stdint.h> 
+#include <stddef.h> 
+typedef uint16_t u_int16_t;
 CLICK_DECLS
 
 CheckWaterMark::CheckWaterMark()
@@ -24,85 +27,47 @@ CheckWaterMark::CheckWaterMark()
   _drops = 0;
 }
 
-int removeWaterMark(char* pktPtr, int& pktLength,int& position, char& waterMark)
+int decode(char* pktPtr, int& pktLength, char* waterMark, int& waterMarkLength, u_int16_t* waterMarkPosition)
 {
-    //char* currPtr = pktPtr;
-    printf("start: %x",*pktPtr);
-    for (int i=0;i<pktLength-1;i++)
+  int hopNum = 0;
+  int waterMarksLeft = waterMarkLength;
+  for(int i =0;i<waterMarkLength;i++)
+  {
+    if(*(pktPtr+waterMarkPosition[i])!=waterMark[i])
     {
-        if (i<position)
-        {
-          pktPtr++;  
-        }
-        else
-        {
-            if(i==position)
-            {
-                printf("\nSent WaterMark: %x Found Mark: %x Position:%d",waterMark, *pktPtr, position);
-                if(waterMark != *pktPtr) return 0;
-            }
-            *pktPtr=*(pktPtr+1);
-            pktPtr++;
-        }
+      printf("watermark failed at position: %d, looking for %x found: %x",waterMarkPosition[i],waterMark[i],*(pktPtr+waterMarkPosition[i]));
+      return 0;
     }
-    pktLength--;
-    printf("\nTaking WaterMark: %x at position: %d",waterMark,position);
-    return 1;
+  }
+  printf("Water mark found, taking watermarks");  
+  pktPtr = pktPtr + (*waterMarkPosition);
+  printf("\n%x",*pktPtr);
+  for(u_int16_t curPosition = *waterMarkPosition;curPosition<pktLength-waterMarkLength;curPosition++)
+  {
+    while(waterMarksLeft > 0 && curPosition+hopNum == *waterMarkPosition)
+    {  
+       hopNum++;
+       waterMarksLeft--;
+       waterMarkPosition++;
+    }
+    *pktPtr = *(pktPtr+hopNum);
+    pktPtr++;
+  }
+  return 1;
 }
-
-int decode(char* pktPtr,int& pktLen, char* waterMark)
-{
-    int pos1 = 55;
-    int pos2 = 60;
-    int pos3 = 65;
-    int pos4 = 70;
-    int embededMark = removeWaterMark(pktPtr,pktLen,pos4,waterMark[3]);
-    if(!embededMark)
-    {
-       printf("\nWaterMark mismatch at position: %d\n",pos4);
-       return 0;
-    }
-    embededMark = removeWaterMark(pktPtr,pktLen,pos3,waterMark[2]);
-    if(!embededMark)
-    {
-       printf("\nWaterMark mismatch at position: %d\n",pos3);
-       return 0;
-    }
-    embededMark = removeWaterMark(pktPtr,pktLen,pos2,waterMark[1]);
-    if(!embededMark)
-    {
-       printf("\nWaterMark mismatch at position: %d\n",pos2);
-       return 0;
-    }
-    embededMark = removeWaterMark(pktPtr,pktLen,pos1,waterMark[0]);
-    if(!embededMark)
-    {
-       printf("\nWaterMark mismatch at position: %d\n", pos1);
-       return 0;
-    }
-    printf("\nWaterMark Matched, Removing waterMark...\n");
-    return 1;
-}
-
+       
 Packet* CheckWaterMark::simple_action(Packet *p)
 {
-  //int len = p->length();
-  //WritablePacket *q = p->put(0);
   WritablePacket *q = p->uniqueify();
   int len = q->length();
- // char* test = (char*) q;
-  //for(int i=0;i<4;i++,test++)
-  //printf("\n%x ",*test);
-  //printf("\n");
   printf("\nlength:%d\n",len);
-  char requiredWaterMark[4] = {0x73,0x6a,0x73,0x75};
-  if(len < 4)
+  char waterMark[4] = {0x75,0x73,0x6a,0x73};
+  int waterMarkLength = 4;
+  u_int16_t waterMarkPosition[4]={55,60,65,70};
+  if (!decode((char*)(q->data()), len, waterMark, waterMarkLength, waterMarkPosition))
     goto drop;
-
-
-  if (!decode((char*)(q->data()),len,requiredWaterMark))
-    goto drop;
-  q->take(4);
+  q->take(waterMarkLength);
+  printf("New packet length: %d",q->length());
   return q;  
  drop:
   click_chatter("WATERMARK failed, len %d", p->length());
