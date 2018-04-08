@@ -59,7 +59,7 @@ Packet* SetWaterMark::simple_action(Packet *p)
   int waterMarkLength = 4;
   struct timeval start, end;
   printf("\nWatermark length: %d",waterMarkLength);
-  printf("\nWatermark: %x, %x, %x, %x", waterMark[0], waterMark[1], waterMark[2], waterMark[4]);
+  printf("\nWatermark: %x, %x, %x, %x", waterMark[0], waterMark[1], waterMark[2], waterMark[3]);
   printf("\nWatermark positions: %d, %d, %d, %d", waterMarkPositions[0], waterMarkPositions[1],waterMarkPositions[2],waterMarkPositions[3]);
   printf("\nOriginal packet Len: %d",len);
   WritablePacket *q = p->put(waterMarkLength);
