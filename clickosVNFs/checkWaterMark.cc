@@ -35,13 +35,13 @@ int decode(char* pktPtr, int& pktLength, char* waterMark, int& waterMarkLength, 
   {
     if(*(pktPtr+waterMarkPosition[i])!=waterMark[i])
     {
-      printf("watermark failed at position: %d, looking for %x found: %x",waterMarkPosition[i],waterMark[i],*(pktPtr+waterMarkPosition[i]));
+      //printf("watermark failed at position: %d, looking for %x found: %x",waterMarkPosition[i],waterMark[i],*(pktPtr+waterMarkPosition[i]));
       return 0;
     }
   }
-  printf("Water mark found, taking watermarks");  
+  //printf("Water mark found, taking watermarks");  
   pktPtr = pktPtr + (*waterMarkPosition);
-  printf("\n%x",*pktPtr);
+ //printf("\n%x",*pktPtr);
   for(u_int16_t curPosition = *waterMarkPosition;curPosition<pktLength-waterMarkLength;curPosition++)
   {
     while(waterMarksLeft > 0 && curPosition+hopNum == *waterMarkPosition)
@@ -60,11 +60,20 @@ Packet* CheckWaterMark::simple_action(Packet *p)
 {
   WritablePacket *q = p->uniqueify();
   int len = q->length();
-  printf("\nlength:%d\n",len);
   char waterMark[4] = {0x75,0x73,0x6a,0x73};
   int waterMarkLength = 4;
   u_int16_t waterMarkPosition[4]={55,60,65,70};
-  if (!decode((char*)(q->data()), len, waterMark, waterMarkLength, waterMarkPosition))
+  struct timeval start, end;
+  printf("\nWatermark length: %d",waterMarkLength);   
+  printf("\nWatermark: %x, %x, %x, %x", waterMark[0], waterMark[1], waterMark[2], waterMark[3]);   
+  printf("\nWatermark positions: %d, %d, %d, %d", waterMarkPosition[0], waterMarkPosition[1],waterMarkPosition[2],waterMarkPosition[3]);   
+  printf("\nOriginal packet Len: %d",len);
+  gettimeofday(&start, NULL);
+  int decodePassed = decode((char*)(q->data()), len, waterMark, waterMarkLength, waterMarkPosition);
+  gettimeofday(&end, NULL);
+  printf("\nWatermarking Execution time in microseconds %ld", ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)));
+  printf("\nNew packet length: %d\n",q->length());
+  if (!decodePassed)
     goto drop;
   q->take(waterMarkLength);
   printf("New packet length: %d",q->length());
