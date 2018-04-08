@@ -1,5 +1,5 @@
 name = 'ingress'
-kernel = '/users/girish0/ClickOsSetupForCloudLab/clickos/minios/build/clickos_x86_64'
+kernel = '/users/girish0/Data-Driven-Micro-Services-for-Intrusion-Detection/clickos/minios/build/clickos_x86_64'
 vcpus = '1'
 memory = '128'
 vif = ['script=vif-openvswitch,mac=00:00:00:00:10:00,bridge=xenbr0']

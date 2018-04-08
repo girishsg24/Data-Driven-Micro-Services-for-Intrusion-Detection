@@ -1,6 +1,9 @@
 #ifndef CLICK_SETWATERMARK_HH
 #define CLICK_SETWATERMARK_HH
 #include <click/element.hh>
+#include <sys/time.h> 
+#include <stdlib.h>
+#include <time.h>
 CLICK_DECLS
 
 class SetWaterMark : public Element { public:
