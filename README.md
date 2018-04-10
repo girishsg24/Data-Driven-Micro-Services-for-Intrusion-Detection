@@ -27,19 +27,19 @@ This scripts have been tested under Ubuntu 14.04 LTS
 =================================================================
 # Install Dependencies
 apt-get update  
-apt-get install build-essential wget
-apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif 
-apt-get install texinfo texlive-latex-base texlive-latex-recommended 
-apt-get install texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial
-apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted 
-apt-get install libncurses5-dev patch libsdl-dev libjpeg62-dev
-apt-get install libvncserver-dev
-apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib 
-apt-get install libx11-dev bison flex xz-utils libyajl-dev
-apt-get install gettext libpixman-1-dev
-apt-get build-dep xen
-apt-get install libglib2.0-dev 
-apt-get install libyajl-dev 
+apt-get install build-essential wget  
+apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif   
+apt-get install texinfo texlive-latex-base texlive-latex-recommended   
+apt-get install texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial  
+apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted   
+apt-get install libncurses5-dev patch libsdl-dev libjpeg62-dev  
+apt-get install libvncserver-dev  
+apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib   
+apt-get install libx11-dev bison flex xz-utils libyajl-dev  
+apt-get install gettext libpixman-1-dev  
+apt-get build-dep xen  
+apt-get install libglib2.0-dev   
+apt-get install libyajl-dev   
 
 ===============================================================================
 To build the assets, run following commands: 
