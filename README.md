@@ -26,7 +26,7 @@ This scripts have been tested under Ubuntu 14.04 LTS
 
 =================================================================
 # Install Dependencies
-apt-get update
+apt-get update  
 apt-get install build-essential wget
 apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif 
 apt-get install texinfo texlive-latex-base texlive-latex-recommended 
