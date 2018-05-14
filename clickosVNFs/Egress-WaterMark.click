@@ -10,7 +10,7 @@ c[0]->Print("Before",MAXLENGTH -1)
  ->Strip(14)
  ->StripIPHeader
  ->CheckWaterMark
- ->UnstripIPHeder
+ ->UnstripIPHeader
  ->Unstrip(14)
 ->Print("After",MAXLENGTH -1)->sink;
 //*************************************************************
