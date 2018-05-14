@@ -6,9 +6,12 @@ source->c;
 
 //************************Important piece********************                                                  
 c[0]->Print("Before",MAXLENGTH -1)
-// ->Strip(14)->StripIPHeader->Print("Strip",MAXLENGTH -1)
+ ->CheckIPHeader(14)
+ ->Strip(14)
+ ->StripIPHeader
  ->CheckWaterMark
-// ->UnstripIPHeader->Unstrip(14)
+ ->UnstripIPHeder
+ ->Unstrip(14)
 ->Print("After",MAXLENGTH -1)->sink;
 //*************************************************************
 
