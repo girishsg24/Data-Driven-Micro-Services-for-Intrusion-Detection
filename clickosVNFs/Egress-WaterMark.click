@@ -1,7 +1,7 @@
 source::FromDevice;                                                                                
 sink::ToDevice;       
 
-c::Classifier(12/0800 34/08,-);  
+c::Classifier(12/0800,-);  
 source->c;                
 
 //************************Important piece********************                                                  
